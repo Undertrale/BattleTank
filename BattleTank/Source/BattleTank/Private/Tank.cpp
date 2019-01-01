@@ -3,6 +3,9 @@
 ///#include "BattleTank.h"
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
+#include "Projectile.h"
+///#include "Components/SceneComponent.h"
 
 
 // Sets default values
@@ -19,10 +22,11 @@ ATank::ATank()
 void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
+	Barrel = BarrelToSet;
 }
 
 
-void ATank::SetTurretReference(UTankTurret* TurretToSet)	///TODO 
+void ATank::SetTurretReference(UTankTurret* TurretToSet)
 {
 	TankAimingComponent->SetTurretReference(TurretToSet);
 }
@@ -41,13 +45,28 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+
 void ATank::AimAt(FVector HitLocation)
 {
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
-/*
-TODO
-void RotateAt , orienteres i forhold til HitLocation!
-to try to ref the rotation of turret to the Tank.BP
-*/
+
+void ATank::Fire() 
+{
+	///bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
+
+	if (Barrel && isReloaded)
+	{
+		/// Spawn a projectile at the socket location on the barrel
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = (GetWorld()->GetTimeSeconds());
+	}
+}

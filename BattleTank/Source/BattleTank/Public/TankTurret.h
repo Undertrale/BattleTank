@@ -15,10 +15,10 @@ class BATTLETANK_API UTankTurret : public UStaticMeshComponent
 
 public:
 	/// -1 is max downward movement, and +1 is max upward movement
-	void Rotate(float RelativeSpeed); /// TODO Changed into RelSpd again
+	void Rotate(float RelativeSpeed);
 
 private:
-	UPROPERTY(EditAnywhere, Category = Setup)
-	float MaxDegreesPerSeconds = 25.; /// TODO Tweaked from PS!
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	float MaxDegreesPerSeconds = 25.;
 
 };

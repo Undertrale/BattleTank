@@ -3,9 +3,9 @@
 #include "TankTurret.h"
 #include "Math/UnrealMathUtility.h"
 
-void UTankTurret::Rotate(float RelativeSpeed) ///TODO Changed back to RelSpd again
+void UTankTurret::Rotate(float RelativeSpeed)
 {
-	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, +1); /// Added
+	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, +1);
 	auto RotationChange = RelativeSpeed * MaxDegreesPerSeconds * GetWorld()->DeltaTimeSeconds;
 	auto Rotation = RelativeRotation.Yaw + RotationChange;
 

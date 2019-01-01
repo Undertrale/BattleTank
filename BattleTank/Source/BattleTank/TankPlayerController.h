@@ -29,12 +29,12 @@ private:
 	/// Return an OUT parameter, true id hit landscape
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5; /// TODO, remove magic nr
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrosshairYLocation = 0.3333; /// TODO, remove magic nr. Here we hard-coded the pos of our crosshair
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.f;
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;

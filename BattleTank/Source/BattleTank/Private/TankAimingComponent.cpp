@@ -3,7 +3,7 @@
 #include "TankAimingComponent.h" /// Needs to be the first header!
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
-#include "TankTurret.h" // TODO
+#include "TankTurret.h"
 
 
 // Sets default values for this component's properties
@@ -24,7 +24,7 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 }
 
 
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)	/// TODO 
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
 {
 	if (!TurretToSet) { return; }
 	Turret = TurretToSet;
@@ -34,7 +34,7 @@ void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)	/// TODO
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	if (!Barrel) { return; }
-	if (!Turret) { return; }	/// TODO
+	if (!Turret) { return; }
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -53,10 +53,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if(bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto RotationDirection = OutLaunchVelocity.GetSafeNormal(); /// TODO safeguard!!
 		auto TankName = GetOwner()->GetName();
 		MoveBarrelTowards(AimDirection); 
-		///MoveTurretTowards(RotationDirection);	///TODO Removed! No need for doubling the amount of code
 
 		///auto Time = GetWorld()->GetTimeSeconds();
 		///UE_LOG(LogTemp, Warning, TEXT("%f Aim solution found"), Time);
@@ -80,17 +78,3 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	Barrel->Elevate(DeltaRotator.Pitch); /// L149; Altering from magic nr to DeltaRotator.Pitch, resulted in losing the Barrel on BP!!
 	Turret->Rotate(DeltaRotator.Yaw); /// Same problem as above
 }
-
-/*
-///Removed = no need to double amount of the same code!
-
-void UTankAimingComponent::MoveTurretTowards(FVector RotationDirection)	///TODO Removed = no need to double amount of the same code!
-{
-	/// Work out difference btw current barrel rotation, and AimDir
-	auto TurretRotator = Turret->GetForwardVector().Rotation();
-	auto RotAsRotator = RotationDirection.Rotation();
-	auto DeltaRotator = RotAsRotator - TurretRotator;
-	
-	Turret->Rotate(DeltaRotator.Yaw); /// L149; Altering from magic nr to DeltaRotator.Pitch, resulted in losing the Barrel on BP!!
-}
-	*/
