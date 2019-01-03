@@ -7,9 +7,11 @@
 #include "TankPlayerController.generated.h" /// Must be the last include
 
 /// Forward Declaration
-class ATank;
+class UTankAimingComponent;
 
-
+/*
+* Responsible for helping the player aim
+*/
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {
@@ -20,9 +22,13 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-private:
-	ATank* GetControlledTank() const;
 
+protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimCompRef); /// We don't need to implement this method in cpp due to UFUNCTION
+
+
+private:
 	/// Start the tank moving the barrel so that a shot would hit where the crosshair intersects the world
 	void AimTowardsCrosshair();
 
@@ -32,7 +38,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5; /// TODO, remove magic nr
 	UPROPERTY(EditDefaultsOnly)
-	float CrosshairYLocation = 0.3333; /// TODO, remove magic nr. Here we hard-coded the pos of our crosshair
+	float CrosshairYLocation = 0.3333; /// TODO, remove magic nr. Here we hard-coded the Pos of our crosshair
 
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.f;

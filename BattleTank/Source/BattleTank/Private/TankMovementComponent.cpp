@@ -17,6 +17,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	/// No need to call Super as we're replacing the functionality
 	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+	/// Make the AI move forwards to the player when in the right angle, L170 + 171
 	auto ForwardThrow =	FVector::DotProduct(TankForward, AIForwardIntention);
 	/// Send this info to the IntendMoveFwr method:
 	IntendMoveForward(ForwardThrow);
@@ -29,7 +30,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	if (!LeftTrack || !RightTrack) { return; }
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 	/// TODO prevent double-speed due to dual control use
@@ -40,7 +41,7 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
 	///UE_LOG(LogTemp, Warning, TEXT("Intend move backward throw: %f"), Throw);
-	if (!LeftTrack || !RightTrack) { return; }
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 	/// TODO prevent double-speed due to dual control use
